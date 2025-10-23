@@ -16,9 +16,10 @@ import { RadioGroup } from 'src/ui/radio-group';
 import { Separator } from 'src/ui/separator';
 import { useOutsideClickClose } from 'src/ui/select/hooks/useOutsideClickClose';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import styles from './ArticleParamsForm.module.scss';
+import clsx from 'clsx';
 
 type ArticleParamsFormProps = {
 	appliedState: ArticleStateType;
@@ -31,7 +32,7 @@ export const ArticleParamsForm = ({
 }: ArticleParamsFormProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedState, setSelectedState] =
-		useState<ArticleStateType>(defaultArticleState);
+		useState<ArticleStateType>(appliedState);
 
 	const rootRef = useRef<HTMLElement | null>(null);
 
@@ -40,10 +41,6 @@ export const ArticleParamsForm = ({
 		rootRef: rootRef,
 		onChange: setIsOpen,
 	});
-
-	useEffect(() => {
-		setSelectedState(appliedState);
-	}, [appliedState]);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -61,7 +58,7 @@ export const ArticleParamsForm = ({
 		<>
 			<ArrowButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
 			<aside
-				className={`${styles.container} ${isOpen ? styles.container_open : ''}`}
+				className={clsx(styles.container, isOpen && styles.container_open)}
 				ref={rootRef}>
 				<form
 					className={styles.form}
